@@ -1,26 +1,7 @@
 import { useState } from "react";
-import bg from "./assets/bg.jpg";
-import Input from "./Components/Input";
-import useCurrencyInfo from "./Hooks/useCurrencyInfo";
 
 function App() {
-  const [amount, SetAmount] = useState(0);
-  const [from, setFrom] = useState("usd");
-  const [to, setTo] = useState("inr");
-  const [convertedAmount, setConvertedAmount] = useState(0);
-  const CurrencyInfo = useCurrencyInfo(from);
-  const options = Object.keys(CurrencyInfo);
-
-  const swap = () => {
-    setFrom(to);
-    setTo(from);
-    setConvertedAmount(amount);
-    SetAmount(convertedAmount);
-  };
-
-  const convert = () => {
-    setConvertedAmount(amount * CurrencyInfo[to]);
-  };
+  
 
   return (
     <>
