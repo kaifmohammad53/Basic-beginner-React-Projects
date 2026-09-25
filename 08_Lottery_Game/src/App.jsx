@@ -2,7 +2,7 @@ import Lottery from './Lottery'
 import { sum } from './helper'
 const App = () => {
     let wincondition=(arr)=>{
-        return arr.every((num)=>num===arr[0]);
+        return sum(arr)===15;
     }
   return (
     <>
