@@ -1,8 +1,24 @@
 import { useState } from "react";
-
+import useCurrencyInfo from "./Hooks/useCurrencyInfo";
+import bg from "../src/assets/bg.jpg"
+import Input from "./Components/Input";
 function App() {
-  
-
+  let [amount,SetAmount]=useState(0);
+  const [fromCurrency, setFromCurrency] = useState("inr");
+  const [toCurrency, setToCurrency] = useState("inr");
+  const [convertedAmount, setConvertedAmount] = useState(0);
+  const currencyInfo=useCurrencyInfo(fromCurrency);
+  const currencyOptions = Object.keys(currencyInfo);
+  let handleSubmit=(e)=>{
+    setConvertedAmount(currencyInfo[toCurrency]*amount);
+  }
+  let swap=()=>{
+    SetAmount(convertedAmount);
+    let temp=fromCurrency;
+    setFromCurrency(toCurrency);
+    setToCurrency(temp);
+    setConvertedAmount(amount);
+  }
   return (
     <>
       <div className="flex flex-col justify-center items-center w-screen h-screen m-0 p-0">
@@ -16,42 +32,43 @@ function App() {
             alt="bg-mage"
             className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-40"
           />
-            <Input
-              label="From"
-              amount={amount}
-              currencyOptions={options}
-              onCurrencyChange={(currency) => {
-                SetAmount(amount);
-              }}
-              onAmountChange={(amount) => {
-                SetAmount(amount);
-              }}
-              selectCurrecy={from}
-            />
+          <Input
+            label="from"
+            amount={amount}
+            currencyOptions={currencyOptions}
+            onCurrencyChange={(currency) => {
+              setFromCurrency(currency);
+            }}
+            onAmountChange={(amount) => {
+              SetAmount(amount);
+            }}
+            selectCurrecy={fromCurrency}
+          />
 
-            <button
-              className="absolute z-20 left-1/2 -translate-x-1/2 -translate-y-2/3 w-30 h-20 rounded-2xl px-5 bg-blue-600 text-white border-2 border-white shadow-lg text-2xl"
-              onClick={swap}
-            >
-              Swap
-            </button>
+          <button
+            className="absolute z-20 left-1/2 -translate-x-1/2 -translate-y-2/3 w-30 h-20 rounded-2xl px-5 bg-blue-600 text-white border-2 border-white shadow-lg text-2xl"
+            onClick={swap}
+          >
+            Swap
+          </button>
 
-            <Input
-              label="To"
-              amount={convertedAmount}
-              currencyOptions={options}
-              onCurrencyChange={(currency) => {
-                setTo(currency);
-              }}
-              selectCurrecy={from}
-            />
+          <Input
+            label="to"
+            amount={convertedAmount}
+            currencyOptions={currencyOptions}
+            onCurrencyChange={(currency) => {
+              setToCurrency(currency);
+            }}
+            selectCurrecy={toCurrency}
+          />
 
-            <button
-              type="submit"
-              className="relative p-5 z-10 m-5 w-full h-1/6 rounded-xl border border-white bg-blue-700 text-white text-2xl text-center"
-            >
-              Convert {from.toUpperCase()} To {to.toUpperCase()}
-            </button>
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="relative p-5 z-10 m-5 w-full h-1/6 rounded-xl border border-white bg-blue-700 text-white text-2xl text-center"
+          >
+            Convert {fromCurrency.toUpperCase()} To {toCurrency.toUpperCase()}
+          </button>
         </div>
       </div>
     </>

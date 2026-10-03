@@ -6,6 +6,7 @@ const Input = ({
   currencyOptions = [],
   selectCurrecy = "usd",
 }) => {
+
   return (
     <div className="flex flex-col justify-around relative gap-3 p-10 z-10 m-2 w-full h-1/3 rounded-xl border-blue-500 border- bg-white">
       <div className="flex justify-between text-xl items-center">
@@ -21,7 +22,7 @@ const Input = ({
           onChange={(e) =>
             onAmountChange && onAmountChange(Number(e.target.value))
           }
-          className="w-1/2 overflow-hidden"
+          className="w-auto overflow-hidden"
         />
 
         <select
@@ -31,7 +32,7 @@ const Input = ({
         >
           {currencyOptions.map((currency) => (
             <option key={currency} value={currency}>
-              {currency}
+              {currency.toUpperCase()}
             </option>
           ))}
         </select>
