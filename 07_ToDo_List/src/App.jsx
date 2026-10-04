@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from "uuid";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import TaskAltSharpIcon from "@mui/icons-material/TaskAltSharp";
 function App() {
   const [todos, setTodos]=useState([{task:"sample-Task", key:uuidv4(), done:false}]);
   let [newtodo,setNewtodo]=useState("");
@@ -16,34 +20,17 @@ function App() {
       todo.key!=id
     ));
   }
-  let updateAllTask=()=>{
+  let updateAllDone=()=>{
     setTodos(todos.map((todo)=>{
       return{
       ...todo,
-      task:todo.task.toUpperCase(),
+      done:true,
       key:uuidv4(),
-      // done:todo.done
     };
     }
     )
   )
   }
-  let updateTask = (id) => {
-    setTodos(
-      todos.map((todo) => {
-        if(todo.key===id){
-          return {
-            ...todo,
-            task: todo.task.toUpperCase(),
-            key: uuidv4(),
-          };
-        }
-        else{
-          return todo;
-        }
-      }),
-    );
-  };
   let updateDone=(id)=>{
     setTodos(
       todos.map((todo) => {
@@ -58,7 +45,16 @@ function App() {
           return todo;
         }
       }));
+      
   }
+  let handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      addTodo();
+    }
+  };
+  let clearAll = () => {
+    setTodos([]);
+  };
   return (
     <>
       <div className="h-screen w-screen flex justify-center items-center flex-col">
@@ -71,6 +67,7 @@ function App() {
             placeholder="what you wanna do?"
             value={newtodo}
             onChange={updatetodo}
+            onKeyDown={handleKeyDown}
             className="h-3 w-full p-7 border-gray-500 border-2 text-xl text-green-700 rounded-xl"
           />
           <button
@@ -81,45 +78,64 @@ function App() {
           </button>
           <hr />
           <hr />
-          <div>
+          <div className="overflow-y-auto h-4/6">
             {todos.map((todo) => (
               <div
                 key={todo.key}
-                className={`grid grid-cols-4 items-center px-5 py-2`}
+                className={`grid grid-cols-[2fr_1fr_1fr] items-center px-5 py-2 gap-2`}
               >
-                <h3 className={`${todo.done ? "line-through" : ""}`}>
+                <h3
+                  className={`${todo.done ? "line-through" : ""} font-serif font-semibold`}
+                >
                   {todo.task}
                 </h3>
-                <button
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  startIcon={<DeleteIcon />}
                   onClick={() => {
                     deleteTodo(todo.key);
                   }}
                 >
-                  delete task
-                </button>
-                <button
-                  onClick={() => {
-                    updateTask(todo.key);
-                  }}
-                >
-                  Set Upper Case
-                </button>
-                <button
+                  Delete
+                </Button>
+                {/* <IconButton aria-label="delete">
+                  <DeleteIcon />
+                </IconButton> */}
+                <Button
+                  color="success"
+                  variant="outlined"
+                  size="small"
+                  startIcon={<TaskAltSharpIcon />}
                   onClick={() => {
                     updateDone(todo.key);
                   }}
                 >
-                  Mark as done
-                </button>
+                  Done
+                </Button>
               </div>
             ))}
           </div>
-          <button
-            onClick={updateAllTask}
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 items-center mb-4"
-          >
-            SET All UPPER CASE
-          </button>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 items-center mb-4 flex w-full justify-center gap-4">
+            <Button
+              onClick={updateAllDone}
+              color="success"
+              variant="outlined"
+              size="medium"
+              startIcon={<TaskAltSharpIcon />}
+            >
+              MARK ALL AS DONE
+            </Button>
+            <Button
+              onClick={clearAll}
+              color="error"
+              variant="outlined"
+              size="medium"
+            >
+              CLEAR ALL
+            </Button>
+          </div>
         </div>
       </div>
     </>
